@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koleksi Game Steam Saya</title>
+  <style>
+    table { width : 100%; border-collapse: collapse; }
+    caption { text-align: left; font-weight: bold; padding-bottom: 8px; }
+    th, td { border: 1px solid #999; padding: 8px 12px; text-align: left; }
+    thead th { background: #1b2838; color: #fff; }
+    tbody tr:nth-child(even) { background: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+  <header id="beranda">
+    <h1>Koleksi Game Steam Saya</h1>
+    <p>Halaman ini berisi daftar game yang saya punya dan form untuk menambah game baru.</p>
+    <nav aria-label="Navigasi utama">
+      <ul>
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#bagian-1">Koleksi</a></li>
+        <li><a href="#bagian-2">Tambah Game</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="bagian-1">
+      <h2>Daftar Game Saya</h2>
+      <img src="koleksi-game-1.webp"
+           alt="Tangkapan layar perpustakaan Steam saya yang menampilkan sampul game dalam bentuk kotak-kotak"
+           width="640" height="360" loading="lazy">
+      <table>
+        <caption>Daftar game Steam yang saya punya</caption>
+        <thead>
+          <tr>
+            <th scope="col">Judul</th>
+            <th scope="col">Tahun Terbit</th>
+            <th scope="col">Genre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Portal 2</th>
+            <td>2011</td>
+            <td>Puzzle</td>
+          </tr>
+          <tr>
+            <th scope="row">Stardew Valley</th>
+            <td>2016</td>
+            <td>Simulasi</td>
+          </tr>
+          <tr>
+            <th scope="row">Hollow Knight</th>
+            <td>2017</td>
+            <td>Metroidvania</td>
+          </tr>
+          <tr>
+            <th scope="row">The Witcher 3: Wild Hunt</th>
+            <td>2015</td>
+            <td>RPG</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <figure>
+
+
+        <figcaption>Perpustakaan Steam saya</figcaption>
+      </figure>
+    </section>
+
+    <section id="bagian-2">
+      <h2>Tambah Game Baru</h2>
+
+      <form action="/simpan" method="post">
+        <p>
+          <label for="judul">Judul</label>
+          <input type="text" id="judul" name="judul" required>
+        </p>
+        <p>
+          <label for="tahun-terbit">Tahun terbit</label>
+          <input type="number" id="tahun-terbit" name="tahun-terbit" min="1970" max="2026" required>
+        </p>
+        <p>
+          <label for="genre">Genre</label>
+          <input type="text" id="genre" name="genre" required>
+        </p>
+        <button type="submit">Simpan</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>Muhammad Naufal Arliansyah · 25523240 · 2026</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koleksi Game Steam Saya</title>
+
+  <link rel="stylesheet" href="token.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="komponen.css">
+  <link rel="stylesheet" href="tema.css">
+</head>
+<body>
+  <div class="page">
+
+    <header id="beranda">
+      <input type="checkbox" id="tema" class="pengalih-tema">
+      <label for="tema" class="tombol-tema">Tema gelap</label>
+
+      <h1>Koleksi Game Steam Saya</h1>
+      <p>Halaman ini berisi daftar game yang saya punya dan form untuk menambah game baru.</p>
+      <nav aria-label="Navigasi utama">
+        <ul class="navbar">
+          <li><a href="#beranda">Beranda</a></li>
+          <li><a href="#bagian-1">Koleksi</a></li>
+          <li><a href="#bagian-2">Tambah Game</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div class="isi">
+        <aside class="sisi">
+          <nav aria-label="Menu samping">
+            <ul class="menu-samping">
+              <li><a href="#bagian-1">Daftar Game</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <div class="utama">
+          <section id="bagian-1">
+            <h2>Daftar Game Saya</h2>
+            <figure>
+              <img src="koleksi-game-1.webp"
+                   alt="Tangkapan layar perpustakaan Steam saya yang menampilkan sampul game dalam bentuk kotak-kotak"
+                   width="640" height="360" loading="lazy">
+              <figcaption>Perpustakaan Steam saya</figcaption>
+            </figure>
+
+            <div class="katalog">
+              <article class="kartu papan">
+                <h3 class="kartu__judul">The Witcher 3: Wild Hunt</h3>
+                <div class="kartu__isi">
+                  <figure>
+                    <img src="the-witcher-3.webp" alt="Sampul game The Witcher 3: Wild Hunt" width="320" height="180" loading="lazy">
+                  </figure>
+                </div>
+                <div class="kartu__kaki"><span>2015</span><span>RPG</span></div>
+              </article>
+              <article class="kartu">
+                <h3 class="kartu__judul">Portal 2</h3>
+                <div class="kartu__isi">
+                  <figure>
+                    <img src="portal-2.webp" alt="Sampul game Portal 2" width="320" height="180" loading="lazy">
+                  </figure>
+                </div>
+                <div class="kartu__kaki"><span>2011</span><span>Puzzle</span></div>
+                
+              </article>
+              <article class="kartu">
+                <h3 class="kartu__judul">Stardew Valley</h3>
+                <div class="kartu__isi">
+                  <figure>
+                    <img src="stardew-valley.webp" alt="Sampul game Stardew Valley" width="320" height="180" loading="lazy">
+                  </figure>
+                </div>
+                <div class="kartu__kaki"><span>2016</span><span>Simulasi</span></div>
+              </article>
+              <article class="kartu">
+                <h3 class="kartu__judul">Hollow Knight</h3>
+                <div class="kartu__kaki"><span>2017</span><span>Metroidvania</span></div>
+                <div class="kartu__isi">
+                  <figure>
+                    <img src="hollow-knight.webp" alt="Sampul game Hollow Knight" width="320" height="180" loading="lazy">
+                  </figure>
+                </div>
+              </article>
+              <article class="kartu">
+                <h3 class="kartu__judul">Hades</h3>
+                <div class="kartu__kaki"><span>2020</span><span>Roguelike</span></div>
+                <div class="kartu__isi">
+                  <figure>
+                    <img src="hades.webp" alt="Sampul game Hades" width="320" height="180" loading="lazy">
+                  </figure>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section id="bagian-2">
+            <h2>Tambah Game Baru</h2>
+            <form class="form-kolom" action="/simpan" method="post">
+              <p>
+                <label for="judul">Judul</label>
+                <input type="text" id="judul" name="judul" required>
+              </p>
+              <p>
+                <label for="tahun-terbit">Tahun terbit</label>
+                <input type="number" id="tahun-terbit" name="tahun-terbit" min="1970" max="2026" required>
+              </p>
+              <p>
+                <label for="genre">Genre</label>
+                <input type="text" id="genre" name="genre" required>
+              </p>
+              <button type="submit">Simpan</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Muhammad Naufal Arliansyah · 25523240 · 2026</p>
+    </footer>
+
+  </div>
+</body>
+</html>

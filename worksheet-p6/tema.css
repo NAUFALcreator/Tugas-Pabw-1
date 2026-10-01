@@ -1,0 +1,113 @@
+:root {
+  --purple-500: #8B5CF6;
+  --purple-700: color-mix(in srgb, var(--purple-500) 75%, #000000);
+  --pink-500:   #EC4899;
+  --pink-700:   #BE185D;
+  --red-500:    #EF4444;
+  --red-700:    #B00020;
+
+  --night-950:  #0B0914;
+  --night-900:  #161224;
+  --night-800:  #2A2442;
+  --night-750:  #4A3F73; 
+  --slate-100:  #F3F4F6;
+
+  --violet-50:  #F5F3FF;
+  --white:      #FFFFFF;
+  --ink-900:    #1A1530;
+  --mauve-500:  #7C7799;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+
+  --radius-md:   0.5rem;
+  --radius-full: 999px;
+
+  --shadow-1: 0 10px 30px rgba(0, 0, 0, .5);
+  --shadow-2: 0 1px 3px rgba(0, 0, 0, .10);
+
+  --text-sm:  0.875rem;
+  --text-md:  1rem;
+  --text-xl:  1.5rem;
+  --text-3xl: 2.25rem;
+}
+:root {
+  color-scheme: dark;
+  --color-bg:         var(--night-950);
+  --color-fg:         var(--slate-100);
+  --color-surface:    var(--night-900);
+  --color-border:     var(--night-750);
+  --color-primary:    var(--purple-500);
+  --color-on-primary: var(--night-950);
+  --color-danger:     var(--red-500);
+  --color-focus:      var(--pink-500);
+  --shadow-card:      var(--shadow-1);
+
+  --card-pad:    var(--space-4);
+  --section-gap: var(--space-6);
+}
+@media (prefers-color-scheme: light) {
+  :root:not(:has(#tema:checked)) {
+    color-scheme: light;
+    --color-bg:         var(--violet-50);
+    --color-fg:         var(--ink-900);
+    --color-surface:    var(--white);
+    --color-border:     var(--mauve-500);
+    --color-primary:    var(--purple-700);
+    --color-on-primary: var(--white);
+    --color-danger:     var(--red-700);
+    --color-focus:      var(--pink-700);
+    --shadow-card:      var(--shadow-2);
+  }
+}
+body:has(#tema:checked) {
+  color-scheme: light;
+  --color-bg:         var(--violet-50);
+  --color-fg:         var(--ink-900);
+  --color-surface:    var(--white);
+  --color-border:     var(--mauve-500);
+  --color-primary:    var(--purple-700);
+  --color-on-primary: var(--white);
+  --color-danger:     var(--red-700);
+  --color-focus:      var(--pink-700);
+  --shadow-card:      var(--shadow-2);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  transition: background-color .2s, color .2s;
+}
+
+.pengalih-tema {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tombol-tema {
+  display: inline-block;
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  font-weight: 500;
+}
+
+.kartu {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--card-pad);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}

@@ -57,32 +57,63 @@ Kriteria selesai saya: kolom galeri berubah saat jendela diseret tanpa media que
 # Catatan penggunaan ai 
 saya memakai ai untuk membantu saya dalam contoh referensi buat readme soal nya di worksheet p5 tidak ada contoh readme seperti p3 dan p4 
 
-Pertemuan 8 — Halaman Koleksi Game yang Digerakkan JavaScript
-nama = MUHAMMAD NAUFAL ARLIANSYAH nim = 25523240
+# Pertemuan 8 — Halaman Koleksi Game yang Digerakkan JavaScript
 
-Sebelumnya halaman Koleksi Game Steam Saya hanya HTML dan CSS: judul, deskripsi, dan footer ditulis langsung di HTML. Di pertemuan ini saya membalik caranya. HTML tinggal kerangka kosong, sedangkan semua isinya disimpan sebagai data di js/app.js lalu dipasang ke halaman lewat DOM.
+| | |
+|---|---|
+| **Nama** | Muhammad Naufal Arliansyah |
+| **NIM** | 25523240 |
+| **Proyek** | Koleksi Game Steam Saya |
 
-Gambar rangka saya
-worksheet-p8/ ├── css/ │ ├── base.css │ ├── komponen.css │ ├── layout.css │ ├── responsif.css │ ├── tema.css │ └── token.css ├── img/ │ ├── hades.webp │ ├── hollow-knight.webp │ ├── koleksi-game-1.webp │ ├── portal-2.webp │ ├── stardew-valley.webp │ └── the-witcher-3.webp ├── js/ │ └── app.js ├── profil.html └── README.md
+## Ringkasan
 
-yang berubah sekarang
-Disimpan di object profil, diisi ke #judul-halaman, #deskripsi-halaman, #footer-teks
-Dibuat otomatis dari array daftarGame oleh buatKartu()
-Form menambah game baru ke daftarGame tanpa pindah halaman
-Dirapikan ke css/, img/, js/
-yang dulu
-Judul, deskripsi, dan footer ditulis di HTML
-Kartu game ditulis satu per satu
-Form hanya tampilan
-semua berkas di satu folder dengan acak acakan
-Hasil pemeriksaan Console
-Tidak ada pesan merah. Yang tampil hanya keluaran console.log dan console.table dari app.js, misalnya Koleksi ini punya 5 game dari 5 genre. dan pilihan: baru -> 3 game. Ada satu peringatan kuning [Intervention] Images loaded lazily... yang berasal dari loading="lazy" pada gambar. Itu informasi dari browser, bukan galat, jadi saya ubah juga
+Sebelumnya halaman Koleksi Game Steam Saya hanya berisi HTML dan CSS: judul, deskripsi, dan footer ditulis langsung di HTML. Di pertemuan ini caranya saya balik. **HTML tinggal kerangka kosong**, sedangkan semua isinya disimpan sebagai data di `js/app.js`, lalu dipasang ke halaman lewat DOM.
 
-Penggunaan ai
-Saya memakai Claude sebagai teman belajar dan pemeriksa, bukan untuk menggantikan pekerjaan. Bantuannya mencakup:
+## Struktur Folder
 
-menjelaskan konsep di atas (const/let, spread, Number(), pesan null, DOM);
-membantu membaca isi Console dan membedakan galat dari peringatan;
-memeriksa pekerjaan terhadap daftar F.1;
-memandu commit dan push di GitHub Desktop, merapikan struktur folder, dan menyusun README ini.
-Yang saya kerjakan sendiri menulis data profil dan daftarGame, membuat fungsi-fungsinya, menyambungkan form, serta menjalankan dan menguji halaman. Saya bertanggung jawab memahami kode ini dan sanggup menjelaskannya.
+```
+worksheet-p8/
+├── css/
+│   ├── base.css
+│   ├── komponen.css
+│   ├── layout.css
+│   ├── responsif.css
+│   ├── tema.css
+│   └── token.css
+├── img/
+│   ├── hades.webp
+│   ├── hollow-knight.webp
+│   ├── koleksi-game-1.webp
+│   ├── portal-2.webp
+│   ├── stardew-valley.webp
+│   └── the-witcher-3.webp
+├── js/
+│   └── app.js
+├── profil.html
+└── README.md
+```
+
+## Apa yang Berubah
+
+| Aspek | Sebelumnya | Sekarang |
+|---|---|---|
+| Judul, deskripsi, footer | Ditulis langsung di HTML | Disimpan di object `profil`, diisi ke `#judul-halaman`, `#deskripsi-halaman`, dan `#footer-teks` |
+| Kartu game | Ditulis satu per satu | Dibuat otomatis dari array `daftarGame` oleh fungsi `buatKartu()` |
+| Form | Hanya tampilan | Menambah game baru ke `daftarGame` tanpa pindah halaman |
+| Berkas | Semua dalam satu folder, acak-acakan | Dirapikan ke `css/`, `img/`, dan `js/` |
+
+## Hasil Pemeriksaan Console
+
+- **Tidak ada pesan merah (galat).** Yang tampil hanya keluaran `console.log` dan `console.table` dari `app.js`, misalnya `Koleksi ini punya 5 game dari 5 genre.` dan `pilihan: baru -> 3 game.`
+- Ada satu **peringatan kuning** `[Intervention] Images loaded lazily...` yang berasal dari atribut `loading="lazy"` pada gambar. Ini informasi dari browser, bukan galat.
+
+## Penggunaan AI
+
+Saya memakai Claude sebagai teman belajar dan pemeriksa, **bukan untuk menggantikan pekerjaan**. Bantuannya mencakup:
+
+- menjelaskan konsep (`const`/`let`, spread, `Number()`, pesan `null`, DOM);
+- membantu membaca isi Console dan membedakan galat dari peringatan;
+- memeriksa pekerjaan terhadap daftar F.1;
+- memandu commit dan push di GitHub Desktop, merapikan struktur folder, dan menyusun README ini.
+
+Yang saya kerjakan sendiri: menulis data `profil` dan `daftarGame`, membuat fungsi-fungsinya, menyambungkan form, serta menjalankan dan menguji halaman. Saya bertanggung jawab memahami kode ini dan sanggup menjelaskannya.

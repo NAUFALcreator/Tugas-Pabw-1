@@ -52,6 +52,37 @@ const buatRingkasan = (daftar) => {
   return `${daftar.length} game (${jumlahBaru} rilis 2016+) · favorit: ${favorit} · ${genre}`;
 };
 
+// ===== Bukti latihan di Console =====
+const jumlahGame = daftarGame.length;
+const daftarGenre = daftarGame.map((game) => game.genre);
+
+console.log(`Halo! Saya ${profil.nama} (${profil.nim}), pemilik ${jumlahGame} game di koleksi Steam.`);
+console.log("Tipe data nama:", typeof profil.nama);
+console.log("Tipe data nim:", typeof profil.nim);
+console.log("Tipe data daftarGenre:", typeof daftarGenre);
+console.log("Tipe data jumlahGame:", typeof jumlahGame);
+console.log(`Pengguna: ${buatBarisFooter(profil)}`);
+console.log(`Genre Game: ${formatGenre(daftarGenre)}`);
+
+console.log("--- Seluruh Daftar Game ---");
+console.table(daftarGame);
+
+console.log("--- Hasil Filter (Game Rilis 2016+) ---");
+console.table(daftarGame.filter(cekGameBaru));
+
+console.log("--- Hasil Find ('Hades') ---");
+console.log(daftarGame.find((game) => game.judul === "Hades"));
+
+console.log("--- Hasil Map (Daftar Judul) ---");
+console.log(daftarGame.map((game) => game.judul));
+
+console.log("--- Hasil Sort (Tahun Terlama, salinan) ---");
+console.table([...daftarGame].sort((a, b) => a.tahun - b.tahun));
+console.log("Urutan asli masih sama:", daftarGame[0].judul);
+
+const salinanProfil = { ...profil, judul: "Judul percobaan" };
+console.log("Salinan profil:", profil.judul, "|", salinanProfil.judul);
+
 // ===== DOM =====
 const ambilElemen = (selector) => {
   const elemen = document.querySelector(selector);

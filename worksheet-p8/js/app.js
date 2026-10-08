@@ -1,4 +1,4 @@
-// ===== Lembar B: data halaman sebagai variabel =====
+// ===== Data =====
 const profil = {
   judul: "Koleksi Game Steam Saya",
   deskripsi: "Halaman ini berisi daftar game yang saya punya dan form untuk menambah game baru.",
@@ -15,59 +15,44 @@ const daftarGame = [
   { judul: "Hades", tahun: 2020, genre: "Roguelike", gambar: "img/hades.webp" },
 ];
 
-const daftarGenre = daftarGame.map((game) => game.genre);
+const gameKosong = { judul: "", tahun: 0, genre: "", gambar: null };
+
+// ===== Fungsi murni =====
 const cekGameBaru = (game) => game.tahun >= 2016;
-let pilihanAktif = "semua";
 
-const kalimat = `Koleksi ini punya ${daftarGame.length} game dari ${daftarGenre.length} genre.`;
-const pengembang = daftarGame[0].pengembang?.nama ?? "belum diisi";
-
-console.log(kalimat);
-console.log("pengembang:", pengembang);
-console.log(typeof profil.judul, typeof profil.tahun);
-
-const buatBarisFooter = ({ nama, nim, tahun }) => {
-  return `${nama} · ${nim} · ${tahun}`;
-};
+const buatBarisFooter = ({ nama, nim, tahun }) => `${nama} · ${nim} · ${tahun}`;
 
 const formatGenre = (daftar) => daftar.join(" · ");
 
-const buatKartu = ({ judul, tahun, genre, gambar }, indeks) => `
+const amankanTeks = (teks) =>
+  String(teks).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+const buatKartu = (game, indeks) => {
+  const { judul, tahun, genre, gambar } = game;
+  const pengembang = game.pengembang?.nama ?? "pengembang belum diisi";
+  const gambarHtml = gambar !== null
+    ? `<figure><img src="${gambar}" alt="Sampul game ${amankanTeks(judul)}" width="320" height="180" loading="lazy"></figure>`
+    : "";
+
+  return `
   <article class="kartu${indeks === 0 ? " papan" : ""}">
-    <h3 class="kartu__judul">${judul}</h3>
+    <h3 class="kartu__judul">${amankanTeks(judul)}</h3>
     <div class="kartu__isi">
-      ${gambar !== null ? `<figure><img src="${gambar}" alt="Sampul game ${judul}" width="320" height="180" loading="lazy"></figure>` : ""}
+      ${gambarHtml}
+      <small>${amankanTeks(pengembang)}</small>
     </div>
-    <div class="kartu__kaki"><span>${tahun}</span><span>${genre}</span></div>
+    <div class="kartu__kaki"><span>${tahun}</span><span>${amankanTeks(genre)}</span></div>
   </article>`;
+};
 
-console.log(buatBarisFooter(profil));
-console.log(formatGenre(daftarGenre));
+const buatRingkasan = (daftar) => {
+  const jumlahBaru = daftar.filter(cekGameBaru).length;
+  const favorit = daftar.find((game) => game.judul === "Hades")?.judul ?? "-";
+  const genre = formatGenre(daftar.map((game) => game.genre));
+  return `${daftar.length} game (${jumlahBaru} rilis 2016+) · favorit: ${favorit} · ${genre}`;
+};
 
-console.table(daftarGenre);
-console.table(daftarGame);
-
-const gameBaru = daftarGame.filter(cekGameBaru);
-console.table(gameBaru);
-
-const hades = daftarGame.find((game) => game.judul === "Hades");
-console.log(hades);
-
-const daftarJudul = daftarGame.map((game) => game.judul);
-console.log(daftarJudul, daftarJudul.length === daftarGame.length);
-
-const gameUrut = [...daftarGame].sort((a, b) => a.tahun - b.tahun);
-console.table(gameUrut);
-console.log("urutan asli masih sama:", daftarGame[0].judul);
-
-const salinanProfil = {...profil };
-salinanProfil.judul = "Judul percobaan";
-console.log(profil.judul, "|", salinanProfil.judul);
-
-pilihanAktif = "baru";
-console.log("pilihan:", pilihanAktif, "->", daftarGame.filter(cekGameBaru).length, "game");
-pilihanAktif = "semua";
-
+// ===== DOM =====
 const ambilElemen = (selector) => {
   const elemen = document.querySelector(selector);
   if (elemen === null) {
@@ -81,19 +66,11 @@ const isiTeks = (selector, teks) => {
   if (elemen !== null) elemen.textContent = teks;
 };
 
-const tampilkanRingkasan = (daftar) => {
-  isiTeks(
-    "#ringkasan-koleksi",
-    `${daftar.length} game · ${formatGenre(daftar.map((game) => game.genre))}`
-  );
-};
-
 const tampilkanKatalog = () => {
   const katalog = ambilElemen("#katalog");
   if (katalog === null) return;
-  const tampil = pilihanAktif === "baru" ? daftarGame.filter(cekGameBaru) : daftarGame;
-  katalog.innerHTML = tampil.map(buatKartu).join("");
-  tampilkanRingkasan(daftarGame);
+  katalog.innerHTML = daftarGame.map(buatKartu).join("");
+  isiTeks("#ringkasan-koleksi", buatRingkasan(daftarGame));
 };
 
 document.title = profil.judul;
@@ -107,10 +84,10 @@ if (formGame !== null) {
   formGame.addEventListener("submit", (event) => {
     event.preventDefault();
     daftarGame.push({
+      ...gameKosong,
       judul: formGame.elements["judul"].value.trim(),
       tahun: Number(formGame.elements["tahun-terbit"].value),
       genre: formGame.elements["genre"].value.trim(),
-      gambar: null,
     });
     tampilkanKatalog();
     formGame.reset();

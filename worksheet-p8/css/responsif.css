@@ -1,0 +1,46 @@
+.isi {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.katalog {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.table-wrap{
+  overflow-x: auto;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.sisi {
+  width: auto;
+}
+
+.kartu {
+  width: auto;
+}
+
+@media (min-width: 48rem) {
+  .katalog {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 60rem) {
+  .isi {
+    grid-template-columns: 16rem 1fr;
+  }
+  .katalog {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

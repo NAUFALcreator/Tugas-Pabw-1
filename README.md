@@ -38,3 +38,21 @@ harus mengubah warna tombol, tautan, judul, dan garis fokus.
 
 ## Catatan penggunaan AI
 saya memakai ai gemini untuk referensi dan penyelesaian masalah saya di tema dan komponen yang mana saya mencari tahu kenapa gagal kode nya saat saya run dan sering kali tidak muncul warna atau warna tersebut menutupi test itu saya jadi saya menggunakan ai tsb untuk memecahkan masalah yang terjadi pada kode saya karena saya banyak terjebak di tema dengan waktu yang lumayan lama jadinya saya mencari tahu masalah nya apa lagi di bagi ubah warna dari gelap dan terang di button ga bisa di pencet dan masalah tersebut terpecah kan jadinya saya tau akar masalah nya abistu saya juga menggunakan gemini untuk mencari letak nya lighthouse dan kontras text karena bingung letak dimana dan dapat solusi nya dan jadinya saya tahu cara memecahkan masalah saya dapat dari css 
+
+## pertemuan ke 5 - layout modern  = flexbox dan grid
+
+┌────────────────────────────────────────────┐
+│ header  (auto)   logo · judul · menu       │
+├──────────────┬─────────────────────────────┤
+│ .sisi        │ .utama  (tempat judul game dll)                    │
+│ 16rem        │ 1fr                         │
+├──────────────┴─────────────────────────────┤
+│ footer  (auto)                             │
+└────────────────────────────────────────────┘
+
+- Kerangka halaman: grid tiga baris (header, isi, footer) lewat satu wadah .page, dengan isi dua kolom (sidebar dan konten). Flex dipakai untuk isi komponen.
+
+Kriteria selesai saya: kolom galeri berubah saat jendela diseret tanpa media query, jarak memakai gap tanpa float, dan tidak ada item yang meluber pada lebar 360 px dan 1 280 px.
+
+# Catatan penggunaan ai 
+saya memakai ai untuk membantu saya dalam contoh referensi buat readme soal nya di worksheet p5 tidak ada contoh readme seperti p3 dan p4 

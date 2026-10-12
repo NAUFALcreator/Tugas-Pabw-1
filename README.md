@@ -39,6 +39,11 @@ harus mengubah warna tombol, tautan, judul, dan garis fokus.
 ## Catatan penggunaan AI
 saya memakai ai gemini untuk referensi dan penyelesaian masalah saya di tema dan komponen yang mana saya mencari tahu kenapa gagal kode nya saat saya run dan sering kali tidak muncul warna atau warna tersebut menutupi test itu saya jadi saya menggunakan ai tsb untuk memecahkan masalah yang terjadi pada kode saya karena saya banyak terjebak di tema dengan waktu yang lumayan lama jadinya saya mencari tahu masalah nya apa lagi di bagi ubah warna dari gelap dan terang di button ga bisa di pencet dan masalah tersebut terpecah kan jadinya saya tau akar masalah nya abistu saya juga menggunakan gemini untuk mencari letak nya lighthouse dan kontras text karena bingung letak dimana dan dapat solusi nya dan jadinya saya tahu cara memecahkan masalah saya dapat dari css 
 
+<<<<<<< Updated upstream
+=======
+Worksheet P5: Layout Modern, Flexbox dan Grid
+
+>>>>>>> Stashed changes
 ## pertemuan ke 5 - layout modern  = flexbox dan grid
 
 ┌────────────────────────────────────────────┐
@@ -55,4 +60,8 @@ saya memakai ai gemini untuk referensi dan penyelesaian masalah saya di tema dan
 Kriteria selesai saya: kolom galeri berubah saat jendela diseret tanpa media query, jarak memakai gap tanpa float, dan tidak ada item yang meluber pada lebar 360 px dan 1 280 px.
 
 # Catatan penggunaan ai 
+<<<<<<< Updated upstream
 saya memakai ai untuk membantu saya dalam contoh referensi buat readme soal nya di worksheet p5 tidak ada contoh readme seperti p3 dan p4 
+=======
+saya memakai ai untuk membantu saya dalam contoh referensi buat readme soal nya di worksheet p5 tidak ada contoh readme seperti p3 dan p4 
+>>>>>>> Stashed changes

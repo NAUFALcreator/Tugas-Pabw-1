@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koleksi Game Steam Saya</title>
+
+   <link rel="stylesheet" href="css/token.css">
+   <link rel="stylesheet" href="css/base.css">
+   <link rel="stylesheet" href="css/layout.css">
+   <link rel="stylesheet" href="css/komponen.css">
+   <link rel="stylesheet" href="css/tema.css">
+   <link rel="stylesheet" href="css/responsif.css">
+</head>
+<body>
+  <div class="page">
+
+    <header id="beranda">
+      <input type="checkbox" id="tema" class="pengalih-tema">
+      <label for="tema" class="tombol-tema">Tema gelap</label>
+
+      <h1 id="judul-halaman"></h1>
+      <p id="deskripsi-halaman"></p>
+      <nav aria-label="Navigasi utama">
+        <ul class="navbar">
+          <li><a href="#beranda">Beranda</a></li>
+          <li><a href="#bagian-1">Koleksi</a></li>
+          <li><a href="#bagian-2">Tambah Game</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div class="isi">
+        <aside class="sisi">
+          <nav aria-label="Menu samping">
+            <ul class="menu-samping">
+              <li><a href="#bagian-1">Daftar Game</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <div class="utama">
+          <section id="bagian-1">
+            <h2>Daftar Game Saya</h2>
+            <figure>
+              <img src="img/koleksi-game-1.webp"
+                   alt="Tangkapan layar perpustakaan Steam saya yang menampilkan sampul game dalam bentuk kotak-kotak"
+                   width="640" height="360" >
+              <figcaption>Perpustakaan Steam saya</figcaption>
+            </figure>
+
+            <p id="ringkasan-koleksi"></p>
+            <div class="katalog" id="katalog"></div>
+          </section>
+
+          <section id="bagian-2">
+            <h2>Tambah Game Baru</h2>
+            <form class="form-kolom" id="form-game" action="/simpan" method="post">
+              <p>
+                <label for="judul">Judul</label>
+                <input type="text" id="judul" name="judul" required>
+              </p>
+              <p>
+                <label for="tahun-terbit">Tahun terbit</label>
+                <input type="number" id="tahun-terbit" name="tahun-terbit" min="1970" max="2026" required>
+              </p>
+              <p>
+                <label for="genre">Genre</label>
+                <input type="text" id="genre" name="genre" required>
+              </p>
+              <button type="submit">Simpan</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p id="footer-teks"></p>
+    </footer>
+
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

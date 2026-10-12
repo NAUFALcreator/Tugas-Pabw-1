@@ -1,11 +1,12 @@
-## Pertemuan 8 — Halaman Koleksi Game yang Digerakkan JavaScript
-nama = MUHAMMAD NAUFAL ARLIANSYAH 
+## Pertemuan 9— Halaman Koleksi Game yang Digerakkan JavaScript
+nama = MUHAMMAD NAUFAL ARLIANSYAH
 nim = 25523240
 
-Sebelumnya halaman Koleksi Game Steam Saya hanya HTML dan CSS: judul, deskripsi, dan footer ditulis langsung di HTML. Di pertemuan ini saya membalik caranya. HTML tinggal kerangka kosong, sedangkan semua isinya disimpan sebagai data di js/app.js lalu dipasang ke halaman lewat DOM.
+Sebelumnya halaman Koleksi Game Steam Saya hanya HTML dan CSS: judul, deskripsi, dan footer ditulis langsung di HTML. Di pertemuan ini saya membalik caranya. HTML tinggal kerangka kosong, sedangkan semua isinya disimpan sebagai data di `js/app.js` lalu dipasang ke halaman lewat DOM oleh `js/dom.js`.
 
 ## Gambar rangka saya
-worksheet-p8/
+```
+worksheet-p9/
 ├── css/
 │   ├── base.css
 │   ├── komponen.css
@@ -21,30 +22,32 @@ worksheet-p8/
 │   ├── stardew-valley.webp
 │   └── the-witcher-3.webp
 ├── js/
-│   └── app.js
+│   ├── app.js
+│   └── dom.js
 ├── profil.html
-└── README.md   
+└── README.md
+```
 
-## yang berubah sekarang 
- - Disimpan di object profil, diisi ke #judul-halaman, #deskripsi-halaman, #footer-teks
- - Dibuat otomatis dari array daftarGame oleh buatKartu()
- - Form menambah game baru ke daftarGame tanpa pindah halaman
- - Dirapikan ke css/, img/, js/ 
- ## yang dulu
- - Judul, deskripsi, dan footer ditulis di HTML
- - Kartu game ditulis satu per satu
- - Form hanya tampilan
- - semua berkas di satu folder dengan acak acakan 
+## Pembagian tugas skrip
+- `js/app.js`: data (`profil`, `daftarGame`), fungsi murni (`cekGameBaru`, `buatBarisFooter`, `formatGenre`, `buatRingkasan`), latihan Console, pengisian judul/deskripsi/footer, dan `export`.
+- `js/dom.js`: mengimpor data dari `app.js`, lalu mengurus render kartu, filter genre, dan validasi form.
+- `profil.html` hanya memuat `js/dom.js`; `app.js` ikut dimuat lewat `import`.
+
+## Yang berubah sekarang
+- Tombol filter genre dibuat dari data dan satu pendengar di induk (`event delegation`) melayani semuanya.
 
 ## Hasil pemeriksaan Console
-Tidak ada pesan merah. Yang tampil hanya keluaran console.log dan console.table dari app.js, misalnya Koleksi ini punya 5 game dari 5 genre. dan pilihan: baru -> 3 game. Ada satu peringatan kuning [Intervention] Images loaded lazily... yang berasal dari loading="lazy" pada gambar. Itu informasi dari browser, bukan galat, jadi saya ubah juga
+Tidak ada pesan merah. Yang tampil hanya keluaran `console.log` dan `console.table` dari `app.js` dan `dom.js`, misalnya `Koleksi ini punya 5 game dari 5 genre.` dan `dom.js jalan, jumlah game: 5`.
 
-## Penggunaan ai
-Saya memakai Claude sebagai teman belajar dan pemeriksa, bukan untuk menggantikan pekerjaan. Bantuannya mencakup:
+Sebelumnya sempat muncul galat `The requested module './app.js' does not provide an export named 'buatRingkasan'`. Penyebabnya `app.js` belum punya `export`. Sudah diperbaiki dengan `export { daftarGame, buatRingkasan, tahunIni };`.
 
-- menjelaskan konsep di atas (const/let, spread, Number(), pesan null, DOM);
+## Penggunaan AI
+Saya memakai GEMINI sebagai teman belajar dan pemeriksa. Bantuannya mencakup:
+
+- menjelaskan konsep (const/let, spread, `Number()`, pesan `null`, event delegation);
 - membantu membaca isi Console dan membedakan galat dari peringatan;
-- memeriksa pekerjaan terhadap daftar F.1;
-- memandu commit dan push di GitHub Desktop, merapikan struktur folder, dan menyusun README ini.
+- memeriksa pekerjaan terhadap daftar periksa F.1;
+- **menulis ulang dan merapikan `js/app.js` dan `js/dom.js`** setelah saya menunjukkan kode awal saya: menambah `export`/`import`, memisahkan tugas kedua berkas, menghapus handler `submit` dan `buatKartu` yang ganda;
+- memandu commit dan push di GitHub Desktop dan menyusun README ini.
 
-Yang saya kerjakan sendiri menulis data profil dan daftarGame, membuat fungsi-fungsinya, menyambungkan form, serta menjalankan dan menguji halaman. Saya bertanggung jawab memahami kode ini dan sanggup menjelaskannya.
+Yang saya kerjakan sendiri: struktur halaman dan CSS awal, data `profil` dan `daftarGame`, versi pertama fungsi-fungsi di `app.js` dan `dom.js`, serta menjalankan, menguji, dan menjawab pertanyaan tentang halaman ini. Saya bertanggung jawab memahami kode ini dan sanggup menjelaskannya.

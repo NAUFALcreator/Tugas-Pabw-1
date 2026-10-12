@@ -51,12 +51,20 @@
             </figure>
 
             <p id="ringkasan-koleksi"></p>
+            <div id="filter" role="group" aria-label="Filter genre">
+              <button type="button" data-kategori="semua" class="aktif">Semua</button>
+              <button type="button" data-kategori="Puzzle">Puzzle</button>
+              <button type="button" data-kategori="Simulasi">Simulasi</button>
+              <button type="button" data-kategori="Metroidvania">Metroidvania</button>
+              <button type="button" data-kategori="RPG">RPG</button>
+            </div>
+            <p id="kosong" hidden>Tidak ada game di genre ini. Coba pilih genre lain atau tambah game baru.</p>
             <div class="katalog" id="katalog"></div>
           </section>
 
           <section id="bagian-2">
             <h2>Tambah Game Baru</h2>
-            <form class="form-kolom" id="form-game" action="/simpan" method="post">
+            <form class="form-kolom" id="form-game" action="/simpan" method="post" novalidate>
               <p>
                 <label for="judul">Judul</label>
                 <input type="text" id="judul" name="judul" required>
@@ -83,5 +91,6 @@
   </div>
 
   <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/dom.js"></script>
 </body>
 </html>

@@ -15,13 +15,13 @@ for (const [nama, el] of Object.entries(daftarElemen)) {
 }
 if (Object.values(daftarElemen).some((el) => !el)) throw new Error("Ada pemilih yang null");
 
-// batas tahun mengikuti tahun sekarang
 form.elements["tahun-terbit"].min = TAHUN_MIN;
 form.elements["tahun-terbit"].max = tahunIni;
 
+const genreTetap = ["Puzzle", "Simulasi", "Metroidvania", "RPG", "Roguelike", "Horor"];
+
 let kategoriAktif = "semua";
 
-// ===== Kartu =====
 function buatKartu(game, indeks) {
   const kartu = document.createElement("article");
   kartu.className = indeks === 0 ? "kartu papan" : "kartu";
@@ -69,7 +69,6 @@ function render(daftar) {
   katalog.append(fragmen);
 }
 
-// ===== Filter (tombol dibuat dari data) =====
 function buatTombolFilter() {
   const genreUnik = [...new Set(daftarGame.map((game) => game.genre))];
   const kategori = ["semua", ...genreUnik];

@@ -1,15 +1,19 @@
-import { daftarGame, buatRingkasan, tahunIni } from "./app.js";
-
+// js/dom.js - lapisan tampilan: seluruh sentuhan ke halaman ada di sini.
+// Kontrak ekspor (dipakai P11): render, tampilkanGalat, aturMemuat (+ isiData untuk app.js).
 const TAHUN_MIN = 1970;
+const tahunIni = new Date().getFullYear();
+
 const katalog     = document.querySelector("#katalog");
 const barisFilter = document.querySelector("#filter");
 const kosong      = document.querySelector("#kosong");
+const pesanMuat   = document.querySelector("#muat");
+const pesanGalat  = document.querySelector("#galat-muat");
 const ringkasan   = document.querySelector("#ringkasan-koleksi");
 const form        = document.querySelector("#form-game");
 const tombolKirim = document.querySelector("#form-game button[type='submit']");
 const kolomForm   = Array.from(document.querySelectorAll("#form-game input"));
 
-const daftarElemen = { katalog, barisFilter, kosong, ringkasan, form, tombolKirim };
+const daftarElemen = { katalog, barisFilter, kosong, pesanMuat, pesanGalat, ringkasan, form, tombolKirim };
 for (const [nama, el] of Object.entries(daftarElemen)) {
   if (!el) console.error(`Elemen "${nama}" tidak ditemukan (null). Cek id di profil.html`);
 }
@@ -18,9 +22,30 @@ if (Object.values(daftarElemen).some((el) => !el)) throw new Error("Ada pemilih 
 form.elements["tahun-terbit"].min = TAHUN_MIN;
 form.elements["tahun-terbit"].max = tahunIni;
 
-const genreTetap = ["Puzzle", "Simulasi", "Metroidvania", "RPG", "Roguelike", "Horor"];
-
+// ===== Keadaan data =====
+let semuaGame = [];
 let kategoriAktif = "semua";
+let dataSiap = false;
+let buatTeksRingkasan = () => "";
+
+// ===== Keadaan antarmuka: memuat, gagal, kosong, berhasil =====
+export function aturMemuat(sedang) {
+  pesanMuat.hidden = !sedang;
+  if (sedang) {
+    kosong.hidden = true;
+    pesanGalat.hidden = true;
+    barisFilter.hidden = true;
+    katalog.textContent = "";
+  }
+}
+
+export function tampilkanGalat(pesan) {
+  katalog.textContent = "";
+  kosong.hidden = true;
+  barisFilter.hidden = true;
+  pesanGalat.textContent = pesan;
+  pesanGalat.hidden = false;
+}
 
 function buatKartu(game, indeks) {
   const kartu = document.createElement("article");
@@ -55,22 +80,24 @@ function buatKartu(game, indeks) {
   return kartu;
 }
 
-function render(daftar) {
-  katalog.textContent = "";
+export function render(daftar) {
+  katalog.textContent = "";            // 1. kosongkan lebih dulu
+  pesanGalat.hidden = true;
 
-  if (daftar.length === 0) {
+  if (daftar.length === 0) {           // 2. keadaan kosong
+    kosong.textContent = "Belum ada game di koleksi. Tambah lewat form di bawah.";
     kosong.hidden = false;
     return;
   }
   kosong.hidden = true;
 
   const fragmen = document.createDocumentFragment();
-  daftar.forEach((game, indeks) => fragmen.append(buatKartu(game, indeks)));
+  daftar.forEach((game, indeks) => fragmen.append(buatKartu(game, indeks)));  // 3. isi ulang
   katalog.append(fragmen);
 }
 
 function buatTombolFilter() {
-  const genreUnik = [...new Set(daftarGame.map((game) => game.genre))];
+  const genreUnik = [...new Set(semuaGame.map((game) => game.genre))];
   const kategori = ["semua", ...genreUnik];
 
   barisFilter.textContent = "";
@@ -84,7 +111,7 @@ function buatTombolFilter() {
 }
 
 function tampil() {
-  const terpilih = daftarGame.filter(
+  const terpilih = semuaGame.filter(
     (game) => kategoriAktif === "semua" || game.genre === kategoriAktif
   );
   barisFilter.querySelectorAll("button").forEach((tombol) => {
@@ -95,6 +122,18 @@ function tampil() {
   render(terpilih);
 }
 
+// Dipanggil app.js setelah data dari api.js berhasil diambil
+export function isiData(data, fnRingkasan) {
+  semuaGame = data;
+  buatTeksRingkasan = fnRingkasan;
+  kategoriAktif = "semua";
+  dataSiap = true;
+  barisFilter.hidden = false;
+  ringkasan.textContent = buatTeksRingkasan(semuaGame);
+  buatTombolFilter();
+  tampil();
+}
+
 barisFilter.addEventListener("click", (event) => {
   const tombol = event.target.closest("button");
   if (!tombol) return;
@@ -102,6 +141,7 @@ barisFilter.addEventListener("click", (event) => {
   tampil();
 });
 
+// ===== Validasi form (tidak berubah dari P9) =====
 const aturan = {
   "judul": (nilai) =>
     nilai.trim() === "" ? "Judul belum diisi. Tulis nama game, misalnya Hades." : "",
@@ -156,6 +196,8 @@ form.addEventListener("input", (event) => {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+  if (!dataSiap) return; // data belum/ gagal dimuat, jangan tambah ke daftar kosong
+
   const hasil = kolomForm.map((kolom) => periksa(kolom));
   if (hasil.includes(false)) {
     sudahGagalKirim = true;
@@ -164,7 +206,9 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  daftarGame.push({
+  const idBaru = semuaGame.reduce((maks, game) => Math.max(maks, game.id ?? 0), 0) + 1;
+  semuaGame.push({
+    id: idBaru,
     judul: form.elements["judul"].value.trim(),
     tahun: Number(form.elements["tahun-terbit"].value),
     genre: rapikanGenre(form.elements["genre"].value),
@@ -179,12 +223,7 @@ form.addEventListener("submit", (event) => {
     document.querySelector(`#galat-${kolom.id}`).hidden = true;
   });
 
-  ringkasan.textContent = buatRingkasan(daftarGame);
+  ringkasan.textContent = buatTeksRingkasan(semuaGame);
   buatTombolFilter();
   tampil();
 });
-
-ringkasan.textContent = buatRingkasan(daftarGame);
-buatTombolFilter();
-tampil();
-console.log("dom.js jalan, jumlah game:", daftarGame.length);

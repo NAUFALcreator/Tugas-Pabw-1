@@ -1,4 +1,8 @@
-import "./api.js";
+// js/app.js - perakit: memanggil api.js (data) dan dom.js (tampilan). Tidak memanggil API sendiri.
+import { ambilProyek } from "./api.js";
+import { isiData, tampilkanGalat, aturMemuat } from "./dom.js";
+
+// ===== Data =====
 const tahunIni = new Date().getFullYear();
 
 const profil = {
@@ -9,13 +13,7 @@ const profil = {
   tahun: tahunIni,
 };
 
-const daftarGame = [
-  { judul: "The Witcher 3: Wild Hunt", tahun: 2015, genre: "RPG", gambar: "img/the-witcher-3.webp" },
-  { judul: "Portal 2", tahun: 2011, genre: "Puzzle", gambar: "img/portal-2.webp" },
-  { judul: "Stardew Valley", tahun: 2016, genre: "Simulasi", gambar: "img/stardew-valley.webp" },
-  { judul: "Hollow Knight", tahun: 2017, genre: "Metroidvania", gambar: "img/hollow-knight.webp" },
-  { judul: "Hades", tahun: 2020, genre: "Roguelike", gambar: "img/hades.webp" },
-];
+// daftarGame sekarang datang dari data/proyek.json lewat ambilProyek()
 
 const cekGameBaru = (game) => game.tahun >= 2016;
 
@@ -30,37 +28,31 @@ const buatRingkasan = (daftar) => {
   return `${daftar.length} game (${jumlahBaru} rilis 2016+) · favorit: ${favorit} · ${genre}`;
 };
 
-const jumlahGame = daftarGame.length;
-const daftarGenre = daftarGame.map((game) => game.genre);
-const jumlahGenre = new Set(daftarGenre).size;
+// Log P8 dipindah ke fungsi, karena data baru ada setelah diambil dari jaringan
+function laporKonsol(daftarGame) {
+  const jumlahGame = daftarGame.length;
+  const daftarGenre = daftarGame.map((game) => game.genre);
+  const jumlahGenre = new Set(daftarGenre).size;
 
-console.log(`Halo! Saya ${profil.nama} (${profil.nim}), pemilik ${jumlahGame} game di koleksi Steam.`);
-console.log(`Koleksi ini punya ${jumlahGame} game dari ${jumlahGenre} genre.`);
-console.log("Tipe data nama:", typeof profil.nama);
-console.log("Tipe data nim:", typeof profil.nim);
-console.log("Tipe data daftarGenre:", typeof daftarGenre);
-console.log("Tipe data jumlahGame:", typeof jumlahGame);
-console.log(`Pengguna: ${buatBarisFooter(profil)}`);
-console.log(`Genre Game: ${formatGenre(daftarGenre)}`);
+  console.log(`Halo! Saya ${profil.nama} (${profil.nim}), pemilik ${jumlahGame} game di koleksi Steam.`);
+  console.log(`Koleksi ini punya ${jumlahGame} game dari ${jumlahGenre} genre.`);
+  console.log("Tipe data daftarGame:", typeof daftarGame, "| larik?", Array.isArray(daftarGame));
+  console.log("Peta data -> id:", typeof daftarGame[0]?.id, "| judul:", typeof daftarGame[0]?.judul,
+    "| tahun:", typeof daftarGame[0]?.tahun, "| genre:", typeof daftarGame[0]?.genre,
+    "| gambar:", typeof daftarGame[0]?.gambar);
+  console.log(`Genre Game: ${formatGenre(daftarGenre)}`);
 
-console.log("--- Seluruh Daftar Game ---");
-console.table(daftarGame);
+  console.log("--- Seluruh Daftar Game ---");
+  console.table(daftarGame);
+  console.log("--- Hasil Filter (Game Rilis 2016+) ---");
+  console.table(daftarGame.filter(cekGameBaru));
+  console.log("--- Hasil Find ('Hades') ---");
+  console.log(daftarGame.find((game) => game.judul === "Hades"));
 
-console.log("--- Hasil Filter (Game Rilis 2016+) ---");
-console.table(daftarGame.filter(cekGameBaru));
-
-console.log("--- Hasil Find ('Hades') ---");
-console.log(daftarGame.find((game) => game.judul === "Hades"));
-
-console.log("--- Hasil Map (Daftar Judul) ---");
-console.log(daftarGame.map((game) => game.judul));
-
-console.log("--- Hasil Sort (Tahun Terlama, salinan) ---");
-console.table([...daftarGame].sort((a, b) => a.tahun - b.tahun));
-console.log("Urutan asli masih sama:", daftarGame[0].judul);
-
-const salinanProfil = { ...profil, judul: "Judul percobaan" };
-console.log("Salinan profil:", profil.judul, "|", salinanProfil.judul);
+  // arah sebaliknya: nilai -> teks
+  const teks = JSON.stringify(daftarGame[0]);
+  console.log("stringify:", typeof teks, teks);
+}
 
 const isiTeks = (selector, teks) => {
   const elemen = document.querySelector(selector);
@@ -75,4 +67,20 @@ document.title = profil.judul;
 isiTeks("#judul-halaman", profil.judul);
 isiTeks("#deskripsi-halaman", profil.deskripsi);
 isiTeks("#footer-teks", buatBarisFooter(profil));
-export { daftarGame, buatRingkasan, tahunIni };
+
+// ===== Memuat data dari jaringan =====
+async function muat() {
+  aturMemuat(true);
+  try {
+    const daftarGame = await ambilProyek(); // respons.ok sudah diperiksa di api.js
+    isiData(daftarGame, buatRingkasan);     // dom.js menyaring lalu memanggil render()
+    laporKonsol(daftarGame);
+  } catch (galat) {
+    tampilkanGalat("Data gagal dimuat. Periksa koneksi, lalu muat ulang halaman.");
+    console.error(galat.message); // untuk Anda, bukan untuk pengguna
+  } finally {
+    aturMemuat(false);
+  }
+}
+
+muat();

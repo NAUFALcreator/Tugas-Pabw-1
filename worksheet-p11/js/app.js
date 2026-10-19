@@ -1,4 +1,3 @@
-// js/app.js - perakit: hanya import dan pemanggilan, tanpa logika.
 import { ambilProyek } from "./api.js";
 import { profil, rapikanItem } from "./data.js";
 import { state, isiProyek } from "./state.js";
@@ -7,12 +6,11 @@ import { pasangPendengar } from "./events.js";
 
 async function mulai() {
   isiProfil(profil);
-  // pulihkan(muat());   // lembar D: aktifkan setelah localStorage selesai
   pasangPendengar();
   aturMemuat(true);
   try {
     const data = await ambilProyek();
-    isiProyek(data.map(rapikanItem));   // isiProyek memanggil render(state)
+    isiProyek(data.map(rapikanItem));   
     const jumlahGenre = new Set(state.daftarProyek.map((game) => game.genre)).size;
     console.log(`Koleksi ini punya ${state.daftarProyek.length} game dari ${jumlahGenre} genre.`);
   } catch (galat) {

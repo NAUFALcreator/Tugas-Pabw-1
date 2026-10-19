@@ -41,8 +41,6 @@ export function isiProfil(profil) {
   isiTeks("#deskripsi-halaman", profil.deskripsi);
   isiTeks("#footer-teks", buatBarisFooter(profil));
 }
-
-// ===== Keadaan antarmuka: memuat, gagal, kosong, berhasil =====
 export function aturMemuat(sedang) {
   el.pesanMuat.hidden = !sedang;
   if (sedang) {
@@ -60,8 +58,6 @@ export function tampilkanGalat(pesan) {
   el.pesanGalat.textContent = pesan;
   el.pesanGalat.hidden = false;
 }
-
-// ===== Kartu (buatKartu P10 + satu tombol favorit) =====
 function buatKartu(game, indeks, favorit) {
   const kartu = document.createElement("article");
   kartu.className = indeks === 0 ? "kartu papan" : "kartu";
@@ -125,18 +121,17 @@ function tandaiTombolAktif(kategori) {
   });
 }
 
-// ===== render(state): tampilan digambar dari state =====
 export function render(state) {
   el.pesanGalat.hidden = true;
   el.barisFilter.hidden = false;
   el.ringkasan.textContent = buatRingkasan(state.daftarProyek);
   buatTombolFilter(state.daftarProyek);
-  tandaiTombolAktif(state.kategoriAktif);   // sebelum cek kosong, agar tombol tetap menyala
+  tandaiTombolAktif(state.kategoriAktif);   
 
-  el.katalog.textContent = "";               // 1. kosongkan lebih dulu
+  el.katalog.textContent = "";               
   const tampil = saring(state.daftarProyek, state.kategoriAktif);
 
-  if (tampil.length === 0) {                 // 2. keadaan kosong
+  if (tampil.length === 0) {                 
     el.kosong.textContent = state.daftarProyek.length === 0
       ? "Belum ada game di koleksi. Tambah lewat form di bawah."
       : "Tidak ada game di genre ini. Coba pilih genre lain atau tambah game baru.";
@@ -145,7 +140,7 @@ export function render(state) {
   }
   el.kosong.hidden = true;
 
-  const fragmen = document.createDocumentFragment();   // 3. isi ulang
+  const fragmen = document.createDocumentFragment();  
   tampil.forEach((game, indeks) => fragmen.append(buatKartu(game, indeks, state.favorit)));
   el.katalog.append(fragmen);
 }

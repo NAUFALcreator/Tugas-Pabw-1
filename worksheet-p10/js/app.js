@@ -68,17 +68,15 @@ isiTeks("#judul-halaman", profil.judul);
 isiTeks("#deskripsi-halaman", profil.deskripsi);
 isiTeks("#footer-teks", buatBarisFooter(profil));
 
-// ===== Memuat data dari jaringan =====
 async function muat() {
   aturMemuat(true);
   try {
-    const daftarGame = await ambilProyek(); // respons.ok sudah diperiksa di api.js
-    isiData(daftarGame, buatRingkasan);     // dom.js menyaring lalu memanggil render()
+    const daftarGame = await ambilProyek(); 
+    isiData(daftarGame, buatRingkasan);    
     laporKonsol(daftarGame);
   } catch (galat) {
     tampilkanGalat("Data gagal dimuat. Periksa koneksi, lalu muat ulang halaman.");
-    console.error(galat.message); // untuk Anda, bukan untuk pengguna
-  } finally {
+    console.error(galat.message); 
     aturMemuat(false);
   }
 }

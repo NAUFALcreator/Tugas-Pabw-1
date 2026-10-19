@@ -1,8 +1,6 @@
-// js/app.js - perakit: memanggil api.js (data) dan dom.js (tampilan). Tidak memanggil API sendiri.
 import { ambilProyek } from "./api.js";
 import { isiData, tampilkanGalat, aturMemuat } from "./dom.js";
 
-// ===== Data =====
 const tahunIni = new Date().getFullYear();
 
 const profil = {
@@ -12,8 +10,6 @@ const profil = {
   nim: "25523240",
   tahun: tahunIni,
 };
-
-// daftarGame sekarang datang dari data/proyek.json lewat ambilProyek()
 
 const cekGameBaru = (game) => game.tahun >= 2016;
 
@@ -28,7 +24,6 @@ const buatRingkasan = (daftar) => {
   return `${daftar.length} game (${jumlahBaru} rilis 2016+) · favorit: ${favorit} · ${genre}`;
 };
 
-// Log P8 dipindah ke fungsi, karena data baru ada setelah diambil dari jaringan
 function laporKonsol(daftarGame) {
   const jumlahGame = daftarGame.length;
   const daftarGenre = daftarGame.map((game) => game.genre);
@@ -49,7 +44,6 @@ function laporKonsol(daftarGame) {
   console.log("--- Hasil Find ('Hades') ---");
   console.log(daftarGame.find((game) => game.judul === "Hades"));
 
-  // arah sebaliknya: nilai -> teks
   const teks = JSON.stringify(daftarGame[0]);
   console.log("stringify:", typeof teks, teks);
 }
@@ -68,17 +62,15 @@ isiTeks("#judul-halaman", profil.judul);
 isiTeks("#deskripsi-halaman", profil.deskripsi);
 isiTeks("#footer-teks", buatBarisFooter(profil));
 
-// ===== Memuat data dari jaringan =====
 async function muat() {
   aturMemuat(true);
   try {
-    const daftarGame = await ambilProyek(); // respons.ok sudah diperiksa di api.js
-    isiData(daftarGame, buatRingkasan);     // dom.js menyaring lalu memanggil render()
+    const daftarGame = await ambilProyek(); 
+    isiData(daftarGame, buatRingkasan);    
     laporKonsol(daftarGame);
   } catch (galat) {
     tampilkanGalat("Data gagal dimuat. Periksa koneksi, lalu muat ulang halaman.");
-    console.error(galat.message); // untuk Anda, bukan untuk pengguna
-  } finally {
+    console.error(galat.message); 
     aturMemuat(false);
   }
 }

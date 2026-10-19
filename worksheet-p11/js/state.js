@@ -8,8 +8,8 @@ export const state = {
   daftarProyek: [],
   kategoriAktif: "semua",
   favorit: [],
-  siap: false,        
-  gagalKirim: false,  
+  siap: false,
+  gagalKirim: false,
 };
 
 // ===== Penyimpanan (Lembar D) =====
@@ -23,16 +23,23 @@ export function simpan(state) {
   localStorage.setItem(KUNCI, JSON.stringify(isi));
 }
 
+// Lembar E: muat() 
 export function muat() {
   try {
-    return JSON.parse(localStorage.getItem(KUNCI));  
+    const isi = JSON.parse(localStorage.getItem(KUNCI));
+    if (isi?.versi !== VERSI) {
+      localStorage.removeItem(KUNCI);   // bentuk lama: buang
+      return null;
+    }
+    return isi;
   } catch {
-    return null;                                      // simpanan rusak: pakai nilai bawaan
+    localStorage.removeItem(KUNCI);     // isi rusak: buang
+    return null;
   }
 }
 
 export function pulihkan(isi) {
-  if (!isi) return;                                   // kunjungan pertama: nilai bawaan tetap
+  if (!isi) return;                     // kunjungan pertama: nilai bawaan tetap
   state.kategoriAktif = isi.kategoriAktif;
   state.favorit = isi.favorit;
 }
@@ -52,13 +59,13 @@ export function isiProyek(daftar) {
 
 export function pilihKategori(nilai) {
   state.kategoriAktif = nilai;
-  simpan(state);                                    
+  simpan(state);
   render(state);
 }
 
 export function tambahFavorit(id) {
   if (state.favorit.includes(id)) return;
-  state.favorit = [...state.favorit, id];            
+  state.favorit = [...state.favorit, id];
   simpan(state);
   render(state);
 }
@@ -66,7 +73,7 @@ export function tambahFavorit(id) {
 export function tambahGame(game) {
   const idBaru = Math.max(0, ...state.daftarProyek.map((g) => g.id)) + 1;
   state.daftarProyek = [...state.daftarProyek, { ...game, id: idBaru, gambar: null }];
-  render(state);                                     
+  render(state);
 }
 
 export function aturGagalKirim(nilai) {

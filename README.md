@@ -1,6 +1,6 @@
-# 🎮 Koleksi Game Steam Saya — Pertemuan 10
+# 🎮 Koleksi Game Steam Saya — Pertemuan 11
 
-### JavaScript Asinkron: `fetch`, Promise, dan JSON
+### Modul, State, dan Penyimpanan Klien
 
 | | |
 |---|---|
@@ -8,27 +8,20 @@
 | **NIM** | 25523240 |
 | **Kelas** | D |
 | **Mata kuliah** | Pengembangan Aplikasi Berbasis Web (SIF302) |
-| **Tanggal** | 15 Oktober 2026 |
+| **Tanggal** | 19 Oktober 2026 |
 
 ---
 
 ### 📌 Ringkasan
 
-Di P9 daftar game masih ditulis sebagai array di `js/app.js`. Di pertemuan ini data dipindahkan ke `data/proyek.json`, diambil lewat `fetch` oleh `js/api.js`, lalu digambar ke halaman oleh `js/dom.js`. Halaman kini menangani **empat keadaan antarmuka**: memuat, berhasil, gagal, dan kosong.
+Di P10 kode JavaScript terbagi menjadi `app.js`, `dom.js`, dan `api.js`. Di pertemuan ini berkasnya dipecah lagi menjadi **lima modul** (`data.js`, `state.js`, `dom.js`, `events.js`, `app.js`) ditambah `api.js` dari P10, sehingga setiap berkas hanya punya satu tanggung jawab. Seluruh keadaan aplikasi dikumpulkan di satu objek `state`, tampilan digambar ulang dari state lewat `render(state)`, dan pilihan pengguna (kategori aktif dan daftar favorit) disimpan di `localStorage` sehingga halaman mengingatnya setelah dimuat ulang.
 
-### ✨ Fitur
-
-- Data game diambil dari jaringan (alamat raw GitHub), bukan ditulis di kode.
-- `respons.ok` diperiksa sebelum badan dibaca, dan bentuk data dipastikan berupa larik.
-- Pesan memuat dan pesan galat tampil **di halaman**, bukan hanya di Console.
-- Filter genre dibuat dari data dan dilayani satu pendengar di induk (*event delegation*).
-- Form tambah game tetap tervalidasi, dan `id` game baru dihitung otomatis dari `id` terbesar.
-- Form tidak bisa menambah game selama data belum berhasil dimuat.
+Satu-satunya fitur baru adalah tombol ☆/★ favorit di setiap kartu dan tombol **Atur ulang**.
 
 ### 🗂️ Struktur Folder
 
 ```
-worksheet-p10/
+worksheet-p11/
 ├── css/
 │   ├── base.css
 │   ├── komponen.css
@@ -36,163 +29,149 @@ worksheet-p10/
 │   ├── responsif.css
 │   ├── tema.css
 │   └── token.css
-├── data/
-│   └── proyek.json      ← baru: data game
-├── img/
-│   ├── hades.webp
-│   ├── hollow-knight.webp
-│   ├── koleksi-game-1.webp
-│   ├── portal-2.webp
-│   ├── stardew-valley.webp
-│   └── the-witcher-3.webp
+├── img/                 ← sampul game dari P9
 ├── js/
-│   ├── api.js           ← baru: lapisan data (fetch)
+│   ├── api.js           ← dari P10: lapisan data (fetch), dipakai apa adanya
 │   ├── app.js           ← perakit
-│   └── dom.js           ← lapisan tampilan
+│   ├── data.js          ← baru: profil, aturan validasi, fungsi murni
+│   ├── dom.js           ← lapisan tampilan
+│   ├── events.js        ← baru: seluruh pendengar peristiwa
+│   └── state.js         ← baru: objek state, fungsi pengubah, penyimpanan
 ├── profil.html
 └── README.md
 ```
 
-### 🔄 Alur Data
+### 🔄 Alur Modul
 
 ```mermaid
-flowchart LR
-    A[proyek.json<br/>di GitHub] -->|fetch| B[api.js<br/>ambilProyek]
-    B -->|larik data| C[app.js<br/>muat]
-    C -->|isiData| D[dom.js]
-    C -.->|gagal| G[tampilkanGalat]
-    D -->|render| E[Halaman]
-    G --> E
+flowchart TD
+    A[app.js<br/>mulai] --> B[state.js<br/>muat / pulihkan]
+    A --> C[api.js<br/>ambilProyek]
+    A --> D[events.js<br/>pasangPendengar]
+    C -->|data| E[state.js<br/>isiProyek]
+    D -->|klik / input / submit| F[state.js<br/>fungsi pengubah]
+    E --> G[dom.js<br/>render state]
+    F -->|simpan| H[(localStorage)]
+    F --> G
+    G --> I[data.js<br/>saring, buatRingkasan]
+    G --> J[Halaman]
 ```
+
+Arah impor: `app.js` → semua modul, `events.js` → `dom.js` dan `state.js`, `state.js` → `dom.js`, `dom.js` → `data.js`. Tidak ada impor melingkar.
 
 ### 🧩 Pembagian Tugas Berkas
 
-| Berkas | Peran |
+| Berkas | Tanggung jawab |
 |---|---|
-| `data/proyek.json` | Data 5 game: `id`, `judul`, `tahun`, `genre`, `gambar`. |
-| `js/api.js` | Menyimpan `ALAMAT` di satu tempat dan mengekspor `ambilProyek()`. Memeriksa `respons.ok`, membaca `json()`, dan memastikan hasilnya larik. **Satu-satunya berkas yang memanggil `fetch`.** |
-| `js/dom.js` | Seluruh sentuhan ke halaman. Mengekspor `render`, `tampilkanGalat`, `aturMemuat` (kontrak untuk P11) dan `isiData` (dipakai `app.js`). Memakai `textContent`, bukan `innerHTML`. |
-| `js/app.js` | Perakit: mengimpor dari `api.js` dan `dom.js`, mengisi judul/deskripsi/footer, lalu menjalankan `muat()` dengan `try/catch/finally`. Tidak memanggil `fetch` sendiri. |
-| `profil.html` | Ditambah `<p id="muat" hidden>` dan `<p id="galat-muat" role="alert" hidden>`. Skrip yang dimuat sekarang `js/app.js`. |
+| `js/data.js` | Objek `profil`, `genreTetap`, aturan validasi form, dan fungsi murni (`cekGameBaru`, `buatBarisFooter`, `formatGenre`, `buatRingkasan`, `rapikanGenre`, `rapikanItem`, `saring`). Tidak menyentuh halaman dan tidak tahu state. |
+| `js/state.js` | Objek `state` tunggal dan fungsi pengubah (`isiProyek`, `pilihKategori`, `tambahFavorit`, `tambahGame`, `aturGagalKirim`, `aturUlang`), serta penyimpanan (`simpan`, `muat`, `pulihkan`). Setiap pengubah memanggil `render(state)`. |
+| `js/dom.js` | Seluruh sentuhan ke halaman: pemilih `el`, `render(state)`, `buatKartu`, tombol filter, validasi form. Memakai `textContent`, bukan `innerHTML`. |
+| `js/events.js` | Memasang semua pendengar lewat `pasangPendengar()`: klik filter, klik favorit, tombol atur ulang, input dan submit form. Hanya memanggil fungsi pengubah. |
+| `js/app.js` | Perakit: mengimpor semuanya dan menjalankan `mulai()`. Tidak berisi logika. |
+| `js/api.js` | Dari P10, tidak diubah. Satu-satunya berkas yang memanggil `fetch`. |
+
+### 🧠 State Tunggal
+
+```js
+export const state = {
+  daftarProyek: [],
+  kategoriAktif: "semua",
+  favorit: [],
+  siap: false,
+  gagalKirim: false,
+};
+```
+
+Tidak ada keadaan yang dibaca dari DOM. Tombol filter aktif dan bintang favorit digambar dari `state.kategoriAktif` dan `state.favorit`.
 
 ### 💻 Kode Kunci
 
-**`js/api.js`: lapisan data**
+```js
+// js/state.js: setiap perubahan lewat satu fungsi bernama
+export function tambahFavorit(id) {
+  if (state.favorit.includes(id)) return;
+  state.favorit = [...state.favorit, id];   // salinan baru, bukan push
+  simpan(state);
+  render(state);
+}
+```
 
 ```js
-const ALAMAT =
-  'https://raw.githubusercontent.com/NAUFALcreator/Tugas-Pabw-1/refs/heads/main/worksheet-p10/data/proyek.json';
-
-export async function ambilProyek() {
+// js/state.js: muat() menangani simpanan rusak dan versi lama
+export function muat() {
   try {
-    const respons = await fetch(ALAMAT);
-    if (!respons.ok) throw new Error('status ' + respons.status);
-
-    const data = await respons.json();
-    if (!Array.isArray(data)) throw new Error('bentuk data bukan larik');
-    return data;
-  } catch (galat) {
-    console.error('gagal memuat', galat.message);
-    throw galat;
+    const isi = JSON.parse(localStorage.getItem(KUNCI));
+    if (isi?.versi !== VERSI) {
+      localStorage.removeItem(KUNCI);
+      return null;
+    }
+    return isi;
+  } catch {
+    localStorage.removeItem(KUNCI);
+    return null;
   }
 }
 ```
 
-**`js/app.js`: perakit**
-
 ```js
-async function muat() {
+// js/app.js: perakit
+async function mulai() {
+  isiProfil(profil);
+  pulihkan(muat());      // pulihkan pilihan terakhir sebelum render pertama
+  pasangPendengar();
   aturMemuat(true);
   try {
-    const daftarGame = await ambilProyek(); // respons.ok sudah diperiksa di api.js
-    isiData(daftarGame, buatRingkasan);     // dom.js menyaring lalu memanggil render()
-    laporKonsol(daftarGame);
+    isiProyek((await ambilProyek()).map(rapikanItem));
   } catch (galat) {
-    tampilkanGalat('Data gagal dimuat. Periksa koneksi, lalu muat ulang halaman.');
-    console.error(galat.message);           // untuk pengembang, bukan untuk pengguna
+    tampilkanGalat("Data gagal dimuat. Periksa koneksi, lalu muat ulang.");
   } finally {
     aturMemuat(false);
   }
 }
-muat();
+mulai();
 ```
 
-**`js/dom.js`: `render()` memakai tiga langkah**
+### 💾 Penyimpanan
 
-```js
-export function render(daftar) {
-  katalog.textContent = '';          // 1. kosongkan lebih dulu
-  pesanGalat.hidden = true;
-  if (daftar.length === 0) {         // 2. keadaan kosong
-    kosong.hidden = false;
-    return;
-  }
-  kosong.hidden = true;
-  daftar.forEach((game, i) => fragmen.append(buatKartu(game, i)));  // 3. isi ulang
-}
-```
+Kunci `pabw-p11` berisi teks JSON `{ versi, kategoriAktif, favorit }` dan disimpan setiap kali keadaan berubah.
 
-### 🖥️ Empat Keadaan Antarmuka
-
-| Keadaan | Kapan terjadi | Yang tampil |
+| Keadaan | Disimpan? | Alasan |
 |---|---|---|
-| ⏳ Memuat | Sebelum balasan datang | "Memuat data..."; filter dan katalog disembunyikan |
-| ✅ Berhasil | Balasan berisi data | Ringkasan, tombol filter, dan kartu game |
-| ❌ Gagal | Jaringan gagal, status bukan 2xx, atau data bukan larik | "Data gagal dimuat. Periksa koneksi, lalu muat ulang halaman." |
-| 📭 Kosong | Larik kosong atau genre tanpa game | Pesan keadaan kosong, bukan layar putih |
+| Kategori aktif | Ya | Pilihan tampilan kecil dan berguna diingat |
+| Daftar favorit | Ya | Pilihan pengguna berupa array id, kecil dan jauh dari batas 5 MB |
+| Data proyek dari server | Tidak | Selalu diambil ulang lewat `ambilProyek()`; salinan lama bisa usang |
+| Token, kata sandi, data pribadi | Tidak | `localStorage` tidak terenkripsi dan bisa dibaca siapa pun di komputer itu |
 
-### 🧱 Tiga Kasus Sulit
-
-| Kasus | Gejala | Penanganan di kode |
-|---|---|---|
-| Status 404 tidak melempar galat | Kartu kosong, Console bersih | `if (!respons.ok) throw new Error(...)` sebelum `json()` |
-| `await` di fungsi biasa | Seluruh skrip berhenti | `ambilProyek()` dan `muat()` dideklarasikan `async` |
-| Balasan sah tanpa butir | Halaman tampak kosong | `render()` memeriksa `daftar.length === 0` dan menampilkan pesan |
-
-### 🔁 Perubahan dari P9
-
-| Bagian | P9 | P10 |
-|---|---|---|
-| Sumber data | Array `daftarGame` di `app.js` | `data/proyek.json` lewat `fetch` |
-| Isi `app.js` | Data + fungsi + render | Perakit: memanggil `api.js` dan `dom.js` |
-| Elemen halaman | Tanpa keadaan memuat/galat | Ada `#muat` dan `#galat-muat` |
-| Form tambah game | Langsung `push` | Ditolak bila data belum siap; `id` baru dihitung dengan `reduce` |
-| Log Console | Langsung di level atas | Dibungkus `laporKonsol()` karena data baru ada setelah diambil |
+Nilai bawaan pada kunjungan pertama: `kategoriAktif = "semua"` dan `favorit = []`. Tombol **Atur ulang** menghapus simpanan dan mengembalikan nilai bawaan.
 
 ### 🧪 Hasil Pengujian
 
 | Yang diuji | Hasil |
 |---|---|
-| Panggilan ke alamat data | `respons.ok` = `true`; status dan Content-Type tercatat di Console |
-| Alamat sengaja dirusak | Pesan galat tampil di halaman, Console bersih dari galat tak tertangani |
-| Jaringan dimatikan di panel Network | Pesan galat tampil, bukan layar kosong |
-| `render([])` dari Console | Pesan keadaan kosong tampil |
-| Muat ulang halaman | Kartu tidak berlipat |
-| Alamat dikembalikan | Daftar tampil lagi tanpa mengubah kode lain |
-
-### 🌐 Sumber Data
-
-Data diambil dari alamat raw GitHub (repositori publik). Saat dikembangkan, `ALAMAT` masih berupa `data/proyek.json` lokal; menggantinya cukup satu baris di `js/api.js`, tanpa mengubah kode lain.
-
-```
-https://raw.githubusercontent.com/NAUFALcreator/Tugas-Pabw-1/refs/heads/main/worksheet-p10/data/proyek.json
-```
-
-> Isi baru di alamat raw bisa terlambat sekitar lima menit setelah `push` karena cache.
+| Halaman setelah dipecah menjadi lima modul | Berjalan sama seperti P10, Console bersih, tidak ada galat impor |
+| Ganti kategori | Hanya `state.kategoriAktif` yang berubah, kartu dan tombol aktif ikut dari state |
+| Klik kategori yang sama dua kali | Tampilan tidak berubah maupun berlipat |
+| Tandai favorit, tutup tab, buka lagi | Pilihan terakhir tetap ada |
+| Tombol **Atur ulang** | Filter kembali ke "Semua", favorit kosong, simpanan dihapus |
+| `localStorage.setItem("pabw-p11", "bukan-json")` lalu muat ulang | Halaman tetap terbuka, simpanan dibuang, nilai bawaan dipakai |
+| `localStorage.setItem("pabw-p11", "{}")` lalu muat ulang | Versi tidak cocok, simpanan dibuang, nilai bawaan dipakai |
+| `localStorage.getItem("pabw-p11")` setelah muat ulang | `null`, skrip tidak berhenti |
 
 ### ▶️ Cara Menjalankan
 
-`fetch` tidak jalan bila halaman dibuka dengan klik dua kali (`file://`). Jalankan lewat server lokal:
+Modul ES (`type="module"`) dan `fetch` tidak jalan bila halaman dibuka dengan klik dua kali (`file://`). Jalankan lewat server lokal:
 
 - VS Code → klik kanan `profil.html` → **Open with Live Server**, atau
 - `python3 -m http.server 8000` lalu buka `http://localhost:8000/profil.html`
+
+Catatan: simpanan terikat alamat, jadi bila nomor port server lokal berubah, pilihan yang tersimpan tidak terlihat.
 
 ### 🤖 Penggunaan AI
 
 Saya memakai AI sebagai teman belajar dan pemeriksa. Bantuannya mencakup:
 
-- menjelaskan konsep (`fetch`, `respons.ok`, `async/await`, `try/catch`, `json()` vs `JSON.stringify`);
-- membantu membaca panel Network dan Console;
-- memeriksa pekerjaan terhadap daftar periksa F.1 dan menyusun README ini.
+- menjelaskan konsep (`export`/`import`, state tunggal, `localStorage`, `JSON.stringify`/`JSON.parse`, versi skema);
+- memeriksa kode terhadap daftar periksa F.1 dan menemukan dua kekurangan: `pulihkan(muat())` belum dipanggil di `app.js`, dan tombol atur ulang belum tersambung ke `events.js`;
+- menuliskan perbaikan untuk `profil.html`, `dom.js`, `events.js`, dan `app.js`, serta membantu menyusun README ini.
 
-**Yang saya kerjakan sendiri:** memindahkan data ke `data/proyek.json`, menulis `js/api.js`, mengubah `app.js` dan `dom.js`, menguji keempat keadaan, mengambil data dari GitHub, dan mengisi worksheet. Saya bertanggung jawab memahami kode ini dan sanggup menjelaskannya.
+**Yang saya kerjakan sendiri:** memecah kode P10 menjadi lima modul, memindahkan keadaan ke objek `state`, menulis fungsi penyimpanan, menguji ketiga kasus simpanan rusak dari Console, dan mengisi worksheet. Saya bertanggung jawab memahami kode ini dan sanggup menjelaskannya.

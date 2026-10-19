@@ -1,5 +1,5 @@
 import { el, periksa, periksaSemua, semuaSah, aturTombolKirim, bacaForm, bersihkanForm } from "./dom.js";
-import { state, pilihKategori, tambahGame, tambahFavorit, aturGagalKirim } from "./state.js";
+import { state, pilihKategori, tambahGame, tambahFavorit, aturGagalKirim, aturUlang } from "./state.js";
 
 export function pasangPendengar() {
   el.barisFilter.addEventListener("click", (event) => {
@@ -13,6 +13,8 @@ export function pasangPendengar() {
     if (!tombol) return;
     tambahFavorit(Number(tombol.dataset.id));
   });
+
+  el.tombolAturUlang.addEventListener("click", aturUlang);
 
   el.form.addEventListener("input", (event) => {
     const kolom = event.target.closest("input");

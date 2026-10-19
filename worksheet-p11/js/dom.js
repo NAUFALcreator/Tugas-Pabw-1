@@ -5,14 +5,15 @@ import { aturan, TAHUN_MIN, tahunIni, genreTetap, saring, buatRingkasan,
 
 // ===== Pemilih (satu objek, diekspor untuk events.js) =====
 export const el = {
-  katalog:     document.querySelector("#katalog"),
-  barisFilter: document.querySelector("#filter"),
-  kosong:      document.querySelector("#kosong"),
-  pesanMuat:   document.querySelector("#muat"),
-  pesanGalat:  document.querySelector("#galat-muat"),
-  ringkasan:   document.querySelector("#ringkasan-koleksi"),
-  form:        document.querySelector("#form-game"),
-  tombolKirim: document.querySelector("#form-game button[type='submit']"),
+  katalog:         document.querySelector("#katalog"),
+  barisFilter:     document.querySelector("#filter"),
+  kosong:          document.querySelector("#kosong"),
+  pesanMuat:       document.querySelector("#muat"),
+  pesanGalat:      document.querySelector("#galat-muat"),
+  ringkasan:       document.querySelector("#ringkasan-koleksi"),
+  form:            document.querySelector("#form-game"),
+  tombolKirim:     document.querySelector("#form-game button[type='submit']"),
+  tombolAturUlang: document.querySelector("#atur-ulang"),
 };
 
 for (const [nama, elemen] of Object.entries(el)) {
@@ -41,6 +42,7 @@ export function isiProfil(profil) {
   isiTeks("#deskripsi-halaman", profil.deskripsi);
   isiTeks("#footer-teks", buatBarisFooter(profil));
 }
+
 export function aturMemuat(sedang) {
   el.pesanMuat.hidden = !sedang;
   if (sedang) {
@@ -58,6 +60,7 @@ export function tampilkanGalat(pesan) {
   el.pesanGalat.textContent = pesan;
   el.pesanGalat.hidden = false;
 }
+
 function buatKartu(game, indeks, favorit) {
   const kartu = document.createElement("article");
   kartu.className = indeks === 0 ? "kartu papan" : "kartu";
@@ -126,12 +129,12 @@ export function render(state) {
   el.barisFilter.hidden = false;
   el.ringkasan.textContent = buatRingkasan(state.daftarProyek);
   buatTombolFilter(state.daftarProyek);
-  tandaiTombolAktif(state.kategoriAktif);   
+  tandaiTombolAktif(state.kategoriAktif);
 
-  el.katalog.textContent = "";               
+  el.katalog.textContent = "";
   const tampil = saring(state.daftarProyek, state.kategoriAktif);
 
-  if (tampil.length === 0) {                 
+  if (tampil.length === 0) {
     el.kosong.textContent = state.daftarProyek.length === 0
       ? "Belum ada game di koleksi. Tambah lewat form di bawah."
       : "Tidak ada game di genre ini. Coba pilih genre lain atau tambah game baru.";
@@ -140,7 +143,7 @@ export function render(state) {
   }
   el.kosong.hidden = true;
 
-  const fragmen = document.createDocumentFragment();  
+  const fragmen = document.createDocumentFragment();
   tampil.forEach((game, indeks) => fragmen.append(buatKartu(game, indeks, state.favorit)));
   el.katalog.append(fragmen);
 }

@@ -1,20 +1,36 @@
+<script setup>
+import { computed, onMounted, watch } from 'vue'
+import { profil, rapikanItem, buatBarisFooter, buatRingkasan } from './data.js'
+import { state, simpan, muat, pulihkan, isiProyek } from './state.js'
+import { ambilProyek } from './api.js'
+import KepalaProfil from './components/KepalaProfil.vue'
+import TombolFilter from './components/TombolFilter.vue'
+import DaftarProyek from './components/DaftarProyek.vue'
+import FormKontak from './components/FormKontak.vue'
+
+const barisFooter = buatBarisFooter(profil)
+const ringkasan = computed(() =>
+  state.daftarProyek.length ? buatRingkasan(state.daftarProyek) : ''
+)
+onMounted(async () => {
+  document.title = profil.judul
+  pulihkan(muat())                          
+  try {
+    isiProyek((await ambilProyek()).map(rapikanItem))
+  } catch (galat) {
+    console.error(galat)
+    state.galat = 'Data gagal dimuat. Periksa koneksi, lalu muat ulang.'
+  } finally {
+    state.memuat = false
+  }
+})
+
+watch(state, (nilai) => simpan(nilai), { deep: true })
+</script>
+
 <template>
   <div class="page">
-
-    <header id="beranda">
-      <input type="checkbox" id="tema" class="pengalih-tema">
-      <label for="tema" class="tombol-tema">Tema gelap</label>
-
-      <h1 id="judul-halaman"></h1>
-      <p id="deskripsi-halaman"></p>
-      <nav aria-label="Navigasi utama">
-        <ul class="navbar">
-          <li><a href="#beranda">Beranda</a></li>
-          <li><a href="#bagian-1">Koleksi</a></li>
-          <li><a href="#bagian-2">Tambah Game</a></li>
-        </ul>
-      </nav>
-    </header>
+    <KepalaProfil :profil="profil" />
 
     <main>
       <div class="isi">
@@ -35,47 +51,21 @@
                    width="640" height="360">
               <figcaption>Perpustakaan Steam saya</figcaption>
             </figure>
-            <p id="ringkasan-koleksi"></p>
-            <p id="muat" hidden>Memuat data...</p>
-            <p id="galat-muat" class="galat" role="alert" hidden></p>
-            <div id="filter" role="group" aria-label="Filter genre">
-              <button type="button" data-kategori="semua" class="aktif">Semua</button>
-              <button type="button" data-kategori="Puzzle">Puzzle</button>
-              <button type="button" data-kategori="Simulasi">Simulasi</button>
-              <button type="button" data-kategori="Metroidvania">Metroidvania</button>
-              <button type="button" data-kategori="RPG">RPG</button>
-              <button type="button" data-kategori="Roguelike">Roguelike</button>
-            </div>
-            <button type="button" id="atur-ulang">Atur ulang</button>
-            <p id="kosong" hidden>Tidak ada game di genre ini. Coba pilih genre lain atau tambah game baru.</p>
-            <div class="katalog" id="katalog"></div>
+            <p id="ringkasan-koleksi">{{ ringkasan }}</p>
+            <TombolFilter />
+            <DaftarProyek />
           </section>
 
           <section id="bagian-2">
             <h2>Tambah Game Baru</h2>
-            <form class="form-kolom" id="form-game" action="/simpan" method="post" novalidate>
-              <p>
-                <label for="judul">Judul</label>
-                <input type="text" id="judul" name="judul" required>
-              </p>
-              <p>
-                <label for="tahun-terbit">Tahun terbit</label>
-                <input type="number" id="tahun-terbit" name="tahun-terbit" min="1970" max="2026" required>
-              </p>
-              <p>
-                <label for="genre">Genre</label>
-                <input type="text" id="genre" name="genre" required>
-              </p>
-              <button type="submit">Simpan</button>
-            </form>
+            <FormKontak />
           </section>
         </div>
       </div>
     </main>
 
     <footer>
-      <p id="footer-teks"></p>
+      <p id="footer-teks">{{ barisFooter }}</p>
     </footer>
-
   </div>
 </template>

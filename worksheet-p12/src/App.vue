@@ -1,7 +1,81 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <HelloWorld />
+  <div class="page">
+
+    <header id="beranda">
+      <input type="checkbox" id="tema" class="pengalih-tema">
+      <label for="tema" class="tombol-tema">Tema gelap</label>
+
+      <h1 id="judul-halaman"></h1>
+      <p id="deskripsi-halaman"></p>
+      <nav aria-label="Navigasi utama">
+        <ul class="navbar">
+          <li><a href="#beranda">Beranda</a></li>
+          <li><a href="#bagian-1">Koleksi</a></li>
+          <li><a href="#bagian-2">Tambah Game</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div class="isi">
+        <aside class="sisi">
+          <nav aria-label="Menu samping">
+            <ul class="menu-samping">
+              <li><a href="#bagian-1">Daftar Game</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <div class="utama">
+          <section id="bagian-1">
+            <h2>Daftar Game Saya</h2>
+            <figure>
+              <img src="/img/koleksi-game-1.webp"
+                   alt="Tangkapan layar perpustakaan Steam saya yang menampilkan sampul game dalam bentuk kotak-kotak"
+                   width="640" height="360">
+              <figcaption>Perpustakaan Steam saya</figcaption>
+            </figure>
+            <p id="ringkasan-koleksi"></p>
+            <p id="muat" hidden>Memuat data...</p>
+            <p id="galat-muat" class="galat" role="alert" hidden></p>
+            <div id="filter" role="group" aria-label="Filter genre">
+              <button type="button" data-kategori="semua" class="aktif">Semua</button>
+              <button type="button" data-kategori="Puzzle">Puzzle</button>
+              <button type="button" data-kategori="Simulasi">Simulasi</button>
+              <button type="button" data-kategori="Metroidvania">Metroidvania</button>
+              <button type="button" data-kategori="RPG">RPG</button>
+              <button type="button" data-kategori="Roguelike">Roguelike</button>
+            </div>
+            <button type="button" id="atur-ulang">Atur ulang</button>
+            <p id="kosong" hidden>Tidak ada game di genre ini. Coba pilih genre lain atau tambah game baru.</p>
+            <div class="katalog" id="katalog"></div>
+          </section>
+
+          <section id="bagian-2">
+            <h2>Tambah Game Baru</h2>
+            <form class="form-kolom" id="form-game" action="/simpan" method="post" novalidate>
+              <p>
+                <label for="judul">Judul</label>
+                <input type="text" id="judul" name="judul" required>
+              </p>
+              <p>
+                <label for="tahun-terbit">Tahun terbit</label>
+                <input type="number" id="tahun-terbit" name="tahun-terbit" min="1970" max="2026" required>
+              </p>
+              <p>
+                <label for="genre">Genre</label>
+                <input type="text" id="genre" name="genre" required>
+              </p>
+              <button type="submit">Simpan</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p id="footer-teks"></p>
+    </footer>
+
+  </div>
 </template>
